@@ -1,24 +1,25 @@
 # Lion
 
-## 介绍
-Lion 是 JumpServer 图形协议的连接组件，支持 RDP、VNC 协议。
+## Introdução
+Lion é o componente de conexão do JumpServer para protocolos gráficos, com suporte para os protocolos RDP e VNC.
 
-Lion 使用 Golang 和 Vue 重构 Guacamole-client，名字来源于 Dota 英雄 [Lion](https://www.dota2.com/hero/lion)。
+Lion é reconstruído em Golang e Vue a partir do cliente Guacamole, com seu nome inspirado no herói Lion do Dota ([Lion](https://www.dota2.com/hero/lion)).
 
-该仓库主要用于配置介绍和 Release 发布。
+Este repositório é principalmente para configuração e lançamento de versões.
 
-## 配置
+## Configuração
 
-Lion 的启动配置，参考 [config_example](config_example.yml)
+Para configurações de inicialização do Lion, consulte [config_example](config_example.yml).
 
-## Docker 镜像 (推荐)
+## Imagem Docker (Recomendado)
 
-可根据 JumpServer 版本获取对应的镜像，例如：获取 v2.10.0 版本的镜像
+Você pode obter a imagem correspondente ao JumpServer de acordo com a versão. Por exemplo, para obter a imagem da versão v2.10.0:
+
 ```shell
 docker pull jumpserver/lion:v2.10.0
 ```
 
-docker 启动
+Inicie o Docker:
 
 ```shell
 docker run -d --name jms_lion -p 8081:8081 \
@@ -27,34 +28,38 @@ docker run -d --name jms_lion -p 8081:8081 \
 jumpserver/lion:v2.10.0
 ```
 
-## 原生安装
+## Instalação Nativa
 
-### 安装 Guacamole Server
-Lion 是基于 [Apache Guacamole](http://guacamole.apache.org/) 开发，原生部署 Lion 需要有 [Guacamole Server](https://github.com/apache/guacamole-server) （版本 >= 1.3.0）。
-[Guacamole Server](https://github.com/apache/guacamole-server) 安装部署可参考 [Guacamole 官网](https://guacamole.apache.org/doc/gug/installing-guacamole.html)
+### Instalação do Servidor Guacamole
+Lion é desenvolvido com base no [Apache Guacamole](http://guacamole.apache.org/). Para implantar o Lion nativamente, você precisa do [Guacamole Server](https://github.com/apache/guacamole-server) (versão >= 1.3.0).
+A instalação do [Guacamole Server](https://github.com/apache/guacamole-server) pode ser consultada em [Guacamole Official Website](https://guacamole.apache.org/doc/gug/installing-guacamole.html).
 
-### 安装 Lion（以 v2.10.0 为例）
-从 Release 页面下载 JumpSever 对应版本的 Lion。下载 `lion-v2.10.0-linux-amd64.tar.gz` 到服务器，并解压到 `/opt` 目录下
+### Instalação do Lion (Exemplo com v2.10.0)
+
+Faça o download da versão correspondente do JumpServer Lion na página de releases. Baixe `lion-v2.10.0-linux-amd64.tar.gz` para o servidor e descompacte-o no diretório `/opt`.
 
 ```shell
 tar -zxvf lion-v2.10.0-linux-amd64.tar.gz -C /opt/
 ```
 
-执行 `cd /opt/lion-v2.10.0-linux-amd64`  进入 Lion 目录，`touch config.yml` 创建文件，添加必要的参数配置
-```shell
-CORE_HOST: http://127.0.0.1:8080 # JumpServer 的 API 地址
+Navegue até o diretório Lion com `cd /opt/lion-v2.10.0-linux-amd64`, crie um arquivo com `touch config.yml` e adicione as configurações necessárias:
 
-BOOTSTRAP_TOKEN: <PleasgeChangeSameWithJumpserver> # 注册使用的预共享秘钥
+```shell
+CORE_HOST: http://127.0.0.1:8080 # Endereço da API do JumpServer
+
+BOOTSTRAP_TOKEN: <PleasgeChangeSameWithJumpserver> # Chave pré-compartilhada de registro
 ```
 
-启动
+Inicie o serviço:
+
 ```shell
 ./lion
 ```
 
-#### 使用系统服务方式启动
+#### Usando o serviço do sistema
 
-在 `/etc/systemd/system` 目录创建 `lion-v2.10.0.service` 文件并配置以下内容
+No diretório `/etc/systemd/system`, crie um arquivo `lion-v2.10.0.service` e configure com o seguinte conteúdo:
+
 ```shell
 [Unit]
 Description=JumpServer Lion Service
@@ -73,22 +78,34 @@ Restart=on-failure
 WantedBy=multi-user.target
 ```
 
-重载系统服务 `systemctl daemon-reload`
+Recarregue o serviço do sistema:
 
-启动 Lion 服务 `systemctl start lion-v2.10.0`
+```shell
+systemctl daemon-reload
+```
 
-查看 Lion 服务状态 `systemctl status lion-v2.10.0`
+Inicie o serviço Lion:
 
-#### 注意事项
+```shell
+systemctl start lion-v2.10.0
+```
 
-如果 Guacamole server 以 docker 方式启动，需要挂载 Lion 目录下的data路径
+Verifique o status do serviço Lion:
+
+```shell
+systemctl status lion-v2.10.0
+```
+
+#### Observações
+
+Se o Guacamole server estiver sendo executado com o Docker, é necessário montar o caminho de dados do Lion:
 
 ```shell
 docker run -d -p 4200:4200 -v /opt/lion-v2.10.0-linux-amd64/data:/opt/lion-v2.10.0-linux-amd64/data guacamole/guacd:1.3.0
 ```
 
-## 致谢
+## Agradecimentos
 
-感谢以下项目，带来的启发
+Agradecimentos aos seguintes projetos pelas inspirações:
 - [guacamole-client](https://github.com/apache/guacamole-client)
 - [next-terminal](https://github.com/dushixiang/next-terminal)
