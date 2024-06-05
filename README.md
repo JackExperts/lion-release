@@ -1,3 +1,3 @@
-git clone https://github.com/joaofaria/lion-v3.10.7.git
+git clone https://github.com/JackExperts/lion-release.git
 
 ./lion
